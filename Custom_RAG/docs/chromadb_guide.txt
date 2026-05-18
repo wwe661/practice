@@ -1,0 +1,38 @@
+ChromaDB Guide
+==============
+
+ChromaDB is an open-source vector database designed for AI applications. It is particularly well-suited for storing and querying embeddings — numerical vector representations of text, images, or other data.
+
+How ChromaDB works:
+1. You create a "collection" (similar to a table in a relational database).
+2. You add documents along with their vector embeddings and optional metadata.
+3. When you query, you provide a query embedding, and ChromaDB returns the most similar documents using approximate nearest neighbor search.
+
+Embeddings:
+An embedding is a dense vector of floating-point numbers that represents the semantic meaning of a piece of text. Similar texts produce similar embeddings (their vectors are close together in vector space). OpenAI's `text-embedding-3-small` model produces 1536-dimensional embeddings and is cheap to use.
+
+ChromaDB storage modes:
+- In-memory: Fast, ephemeral — data is lost when the process ends.
+- Persistent (on-disk): Data is saved to a local directory and survives restarts. Use `chromadb.PersistentClient(path="./chroma_db")` to enable this.
+
+Key ChromaDB operations:
+- `client.get_or_create_collection(name)` — get existing or create new collection
+- `collection.add(ids, embeddings, documents, metadatas)` — insert data
+- `collection.query(query_embeddings, n_results)` — semantic search
+- `collection.delete(ids)` — remove specific entries
+- `collection.count()` — number of stored items
+
+ChromaDB vs other vector databases:
+- Pinecone: Managed cloud service, no local storage option, requires API key
+- Weaviate: More complex setup, good for production scale
+- FAISS: Low-level library by Meta, no built-in persistence or metadata handling
+- ChromaDB: Simple, local-first, great for prototyping and small-to-medium workloads
+
+Integration with RAG:
+ChromaDB is commonly used as the retrieval component in RAG pipelines. The workflow is:
+1. Embed all your knowledge-base documents and store them in ChromaDB.
+2. At query time, embed the user's question.
+3. Query ChromaDB for the top-K most similar document chunks.
+4. Pass those chunks as context to an LLM (e.g., GPT-4o-mini) to generate the answer.
+
+ChromaDB supports filtering queries by metadata, which lets you scope searches to specific document categories, date ranges, or authors.

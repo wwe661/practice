@@ -1,0 +1,34 @@
+AI Agents
+=========
+
+An AI Agent is an autonomous or semi-autonomous system that uses a Large Language Model (LLM) as its core reasoning engine. Unlike a simple chatbot that only generates text, an agent can perceive its environment, make decisions, and take actions to achieve a goal.
+
+Core Components of an AI Agent:
+1. LLM Brain — The language model serves as the decision-making core, interpreting instructions and determining what to do next.
+2. Planning Module — The agent breaks complex tasks into smaller, manageable steps. Common planning strategies include chain-of-thought reasoning, task decomposition, and self-reflection.
+3. Memory — Agents maintain short-term (conversation context) and long-term (persistent knowledge) memory to inform their decisions across interactions.
+4. Tools — External capabilities the agent can invoke, such as web search, code execution, database queries, file operations, or API calls.
+5. Action Loop — The agent operates in an observe-think-act cycle: it observes input or feedback, thinks about what to do (using the LLM), and acts (by calling a tool or responding).
+
+Types of AI Agents:
+- Reactive Agents: Respond to the current input without maintaining internal state. Simple and fast but limited.
+- Deliberative Agents: Maintain an internal model of the world and plan multi-step actions before executing.
+- Conversational Agents: Engage in dialogue with users, maintaining context across turns to complete tasks collaboratively.
+- Autonomous Agents: Operate with minimal human oversight, continuously looping through goal evaluation, planning, and execution (e.g., AutoGPT, BabyAGI).
+
+Agent Architectures:
+- Single Agent: One LLM handles all reasoning and tool calling. Simple but may struggle with complex multi-domain tasks.
+- Multi-Agent Systems: Multiple specialized agents collaborate, each handling a specific domain or role. Agents can pass messages, delegate subtasks, or debate to reach consensus.
+- Hierarchical Agents: A supervisor agent orchestrates worker agents, assigning tasks and aggregating results.
+
+Popular Agent Frameworks:
+- LangChain / LangGraph: Provides abstractions for building agents with tools, chains, and graph-based workflows.
+- CrewAI: Focuses on multi-agent collaboration with roles, goals, and backstories.
+- AutoGen (Microsoft): Enables multi-agent conversations where agents can write and execute code.
+- OpenAI Assistants API: Managed agent runtime with built-in tools like code interpreter and file search.
+
+Key Challenges with Agents:
+- Reliability: Agents may take wrong actions or enter infinite loops.
+- Cost: Multiple LLM calls and tool invocations can be expensive.
+- Safety: Autonomous actions need guardrails to prevent harmful or unintended side effects.
+- Evaluation: Measuring agent performance is harder than evaluating a single LLM response.

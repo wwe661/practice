@@ -1,0 +1,24 @@
+Artificial Intelligence (AI) Overview
+======================================
+
+Artificial Intelligence (AI) refers to the simulation of human intelligence in machines that are programmed to think, learn, and solve problems.
+
+Machine Learning (ML) is a subset of AI where systems learn from data without being explicitly programmed. Instead of following hard-coded rules, ML models find patterns in training data and use those patterns to make predictions or decisions.
+
+Deep Learning is a further subset of ML that uses neural networks with many layers (hence "deep") to model complex patterns. It has enabled breakthroughs in image recognition, natural language processing, and speech recognition.
+
+Large Language Models (LLMs) are a class of deep learning models trained on massive corpora of text. Examples include GPT-4, Claude, and Gemini. These models can generate coherent text, answer questions, summarize documents, write code, and much more.
+
+Retrieval-Augmented Generation (RAG) is a technique that combines a retrieval system (e.g., a vector database) with a generative LLM. Instead of relying solely on the model's internal knowledge, RAG first fetches relevant documents from an external knowledge base and feeds them to the LLM as context. This grounds the LLM's response in up-to-date or domain-specific information.
+
+Key benefits of RAG:
+- Reduces hallucination by grounding answers in retrieved facts
+- Allows LLMs to access information beyond their training cutoff
+- Enables domain-specific Q&A without expensive fine-tuning
+- Provides source attribution so users know where answers came from
+
+Common use cases for AI and RAG:
+- Customer support chatbots with company knowledge bases
+- Legal and medical document Q&A
+- Code documentation assistants
+- Internal enterprise search and knowledge management

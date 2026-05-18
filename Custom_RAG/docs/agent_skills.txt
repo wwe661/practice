@@ -1,0 +1,54 @@
+Agent Skills
+=============
+
+Agent Skills are specialized, reusable capabilities or behaviors that can be composed together to create powerful AI agents. Rather than building monolithic agents, the skills-based approach modularizes agent functionality into discrete, well-defined competencies.
+
+What Are Agent Skills?
+An Agent Skill is a self-contained unit of functionality that an agent can invoke to perform a specific type of task. Skills abstract away the complexity of individual operations and present a clean interface for the agent's reasoning engine (the LLM) to use.
+
+Examples of Agent Skills:
+- Web Browsing: Navigate websites, extract content, fill forms, click buttons.
+- Code Writing: Generate, edit, and debug code in various programming languages.
+- Data Analysis: Process datasets, compute statistics, create visualizations.
+- File Management: Read, write, create, and organize files and directories.
+- Research: Search the web, summarize articles, synthesize information from multiple sources.
+- Communication: Draft emails, messages, and reports in appropriate formats.
+- Image Generation: Create images from text descriptions using models like DALL-E or Stable Diffusion.
+- Database Querying: Write and execute SQL queries, interpret results.
+
+Skill Architecture:
+A well-designed skill typically contains:
+1. Skill Definition: A clear description of what the skill does, used by the LLM to decide when to invoke it.
+2. Input Schema: The parameters the skill accepts, with types and descriptions.
+3. Execution Logic: The code or workflow that performs the actual task.
+4. Output Format: The structured result returned to the agent.
+5. Error Handling: Graceful handling of failures with informative error messages.
+
+Skill Composition:
+Complex tasks often require combining multiple skills. For example, a "Research Report" task might compose:
+- Research Skill → gather information from the web.
+- Data Analysis Skill → process and analyze the findings.
+- Code Writing Skill → create charts and visualizations.
+- Communication Skill → draft the final report.
+
+The agent's planning module determines which skills to use and in what order.
+
+Skill Libraries:
+Many agent frameworks provide pre-built skill libraries:
+- LangChain Tools: A large collection of pre-built tools (search, calculators, APIs) that function as skills.
+- OpenAI Code Interpreter: A built-in skill that lets agents write and execute Python code in a sandboxed environment.
+- Custom Skills: Teams can build domain-specific skills (e.g., querying internal databases, interacting with proprietary APIs).
+
+Skill Discovery and Selection:
+When an agent has access to many skills, it must efficiently select the right ones:
+- Description Matching: The LLM matches the user's intent against skill descriptions.
+- Skill Routing: A classifier or embedding-based system routes requests to appropriate skills.
+- Skill Chaining: The agent plans a sequence of skills to execute for multi-step tasks.
+
+Best Practices for Building Skills:
+- Make skills single-purpose and composable.
+- Write detailed, clear descriptions so the LLM can select skills accurately.
+- Include examples of when to use (and when not to use) each skill.
+- Implement proper error handling and timeouts.
+- Version skills independently so they can be updated without breaking the agent.
+- Test skills in isolation before integrating them into an agent.

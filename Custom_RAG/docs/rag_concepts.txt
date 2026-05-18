@@ -1,0 +1,97 @@
+RAG: Retrieval, Metadata Filtering, and Chunking
+==================================================
+
+Retrieval-Augmented Generation (RAG) enhances LLM responses by retrieving relevant information from an external knowledge base before generating an answer. This document covers three critical RAG components in depth: retrieval strategies, metadata filtering, and chunking techniques.
+
+Retrieval Strategies
+--------------------
+
+Retrieval is the process of finding the most relevant documents or passages for a given query. The quality of retrieval directly impacts the quality of the final answer.
+
+Dense Retrieval (Semantic Search):
+- Uses embedding models to convert text into dense vectors.
+- Finds similar documents by measuring cosine similarity or dot product between query and document vectors.
+- Captures semantic meaning — "happy" and "joyful" would have similar embeddings even though the words are different.
+- Common embedding models: OpenAI text-embedding-3-small, Cohere embed-v3, Sentence-BERT.
+
+Sparse Retrieval (Keyword Search):
+- Uses traditional methods like BM25 or TF-IDF.
+- Matches based on exact keyword overlap.
+- Works well when exact terminology matters (e.g., product codes, legal terms).
+- Fast and interpretable but misses semantic relationships.
+
+Hybrid Retrieval:
+- Combines dense and sparse retrieval using Reciprocal Rank Fusion (RRF) or weighted scoring.
+- Gets the best of both worlds: semantic understanding plus keyword precision.
+- Increasingly common in production RAG systems.
+
+Re-Ranking:
+- After initial retrieval, a cross-encoder model re-scores each candidate document against the query.
+- More computationally expensive but significantly improves relevance.
+- Popular re-rankers: Cohere Rerank, cross-encoder models from Hugging Face.
+
+Metadata Filtering
+------------------
+
+Metadata filtering allows you to narrow down search results based on structured attributes attached to documents, before or during the similarity search.
+
+Common metadata fields:
+- source: The original document name or URL.
+- date: When the document was created or last updated.
+- category: Topic, department, or section classification.
+- author: Who wrote the document.
+- chunk_index: Position of the chunk within the source document.
+- language: Language of the document.
+
+How metadata filtering works in ChromaDB:
+When querying ChromaDB, you can pass a `where` filter:
+  collection.query(
+      query_embeddings=[embedding],
+      n_results=5,
+      where={"category": "technical"},
+      where_document={"$contains": "python"}
+  )
+
+Benefits of metadata filtering:
+- Reduces search space, improving both speed and relevance.
+- Enables multi-tenant RAG systems where each user only sees their own documents.
+- Allows time-based filtering to prioritize recent information.
+- Supports category-scoped searches (e.g., only search HR policies, not engineering docs).
+
+Chunking Strategies
+-------------------
+
+Chunking is the process of breaking large documents into smaller pieces for embedding and retrieval. The chunking strategy significantly affects retrieval quality.
+
+Fixed-Size Chunking:
+- Splits text into chunks of a fixed character or token count (e.g., 400 characters).
+- Simple to implement and works well for uniform content.
+- May split sentences or paragraphs awkwardly.
+- Adding overlap (e.g., 80 characters) between chunks helps preserve context across boundaries.
+
+Sentence-Based Chunking:
+- Splits text at sentence boundaries using NLP sentence tokenizers.
+- Preserves grammatical coherence within each chunk.
+- Chunk sizes can vary significantly.
+
+Paragraph-Based Chunking:
+- Splits on paragraph or section boundaries (e.g., double newlines or headers).
+- Preserves topical coherence — each chunk is about one idea or subtopic.
+- Best for well-structured documents.
+
+Semantic Chunking:
+- Uses embeddings to group semantically related sentences together.
+- Sentences are split into a new chunk when the embedding similarity between consecutive sentences drops below a threshold.
+- Produces the most coherent chunks but is computationally expensive.
+
+Recursive Chunking:
+- Tries to split on the largest meaningful boundary first (e.g., sections), then paragraphs, then sentences, then characters.
+- Used by LangChain's RecursiveCharacterTextSplitter.
+- Balances coherence and consistent chunk size.
+
+Chunking Best Practices:
+- Aim for chunk sizes of 200-1000 tokens depending on your embedding model's context window.
+- Always include overlap (10-20% of chunk size) to avoid losing context at boundaries.
+- Attach metadata (source, section title, page number) to each chunk for traceability.
+- Test different strategies and measure retrieval quality on your specific data.
+- Consider using parent-child chunking: store small chunks for retrieval but return the larger parent context to the LLM.

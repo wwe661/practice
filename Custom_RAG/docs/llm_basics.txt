@@ -1,0 +1,93 @@
+LLM Basics: Context Window, Hallucination, Thinking, Reasoning, and Tool Calling
+==================================================================================
+
+Large Language Models (LLMs) are transformer-based neural networks trained on massive text datasets to predict the next token in a sequence. This document covers fundamental LLM concepts that every AI practitioner should understand.
+
+Context Window
+--------------
+
+The context window is the maximum number of tokens (words and subwords) an LLM can process in a single request, including both the input (prompt) and the output (response).
+
+Key facts about context windows:
+- GPT-4o: 128K tokens context window.
+- Claude 3.5 Sonnet: 200K tokens context window.
+- Gemini 1.5 Pro: Up to 2M tokens context window.
+- Larger context windows allow processing longer documents but increase cost and latency.
+- Performance can degrade on information in the middle of very long contexts (the "lost in the middle" problem).
+
+Context window management strategies:
+- Truncation: Simply cut off content that exceeds the window.
+- Summarization: Summarize older parts of the conversation to save space.
+- RAG: Retrieve only the most relevant content instead of stuffing everything into context.
+- Sliding Window: Process documents in overlapping chunks.
+
+Hallucination
+-------------
+
+Hallucination occurs when an LLM generates text that sounds plausible but is factually incorrect, fabricated, or unsupported by the provided context. LLMs do not "know" facts — they predict statistically likely next tokens.
+
+Types of hallucination:
+- Factual Hallucination: The model states incorrect facts (e.g., wrong dates, fake citations).
+- Faithfulness Hallucination: The model's response contradicts the provided context or source documents.
+- Confabulation: The model fills in knowledge gaps with plausible-sounding but invented details.
+
+Causes of hallucination:
+- Training data gaps or contradictions.
+- Overly creative or high-temperature generation settings.
+- Ambiguous or poorly worded prompts.
+- Lack of grounding in external knowledge.
+
+Mitigation strategies:
+- Use RAG to ground responses in retrieved facts.
+- Lower the temperature parameter (e.g., 0.1-0.3) for more deterministic outputs.
+- Instruct the model to say "I don't know" when uncertain.
+- Implement fact-checking pipelines or citation verification.
+- Use chain-of-thought prompting to make the model's reasoning transparent.
+
+Thinking and Reasoning
+-----------------------
+
+Modern LLMs can perform complex reasoning tasks when given proper prompting techniques.
+
+Chain-of-Thought (CoT) Prompting:
+- Encourages the model to break down problems step-by-step before giving a final answer.
+- Dramatically improves performance on math, logic, and multi-step reasoning tasks.
+- Example: "Let's think step by step..." or providing worked examples.
+
+Tree-of-Thought (ToT):
+- The model explores multiple reasoning paths, evaluates each, and selects the best one.
+- Simulates human deliberation and backtracking.
+
+Self-Reflection:
+- The model critiques its own output and refines it.
+- Example: "Review your answer for errors and correct any mistakes."
+
+Reasoning Models:
+- OpenAI o1 and o3: Models specifically trained for extended reasoning. They generate internal "thinking" tokens before producing a response.
+- These models excel at complex math, coding, and scientific reasoning.
+- They trade speed for accuracy — responses take longer but are more reliable on hard problems.
+
+Extended Thinking:
+- Some models support an explicit "thinking" phase where the model generates private reasoning tokens that the user may or may not see.
+- Anthropic's Claude supports extended thinking with a visible thinking block.
+- This allows the model to "work through" complex problems systematically.
+
+Tool Calling
+------------
+
+Tool calling (also called function calling) is the ability of an LLM to recognize when it needs external help and to generate structured requests to invoke external tools.
+
+How it works:
+1. The developer provides tool/function definitions (name, description, parameter schema) in the API request.
+2. The LLM analyzes the user's query and decides if a tool call is needed.
+3. If yes, the LLM outputs a structured JSON object with the tool name and arguments instead of generating text.
+4. The application executes the tool and feeds the result back to the LLM.
+5. The LLM incorporates the tool result into its final response.
+
+Tool calling is fundamental to building AI agents that can interact with the real world. Without tools, LLMs are limited to text generation from their training data.
+
+Common use cases for tool calling:
+- Retrieving real-time data (weather, stock prices, news).
+- Performing calculations or running code.
+- Querying databases or knowledge bases.
+- Taking actions (sending emails, creating tickets, updating records).
