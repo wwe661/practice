@@ -1,0 +1,55 @@
+Tools in AI Systems
+====================
+
+Tools are external functions or APIs that an AI agent can invoke to interact with the real world beyond text generation. While LLMs can reason and generate language, tools give them the ability to take concrete actions — search the web, query databases, run code, send emails, or manipulate files.
+
+How Tool Calling Works:
+1. The LLM receives a user request along with a list of available tools described in a structured format (usually JSON schema).
+2. The LLM decides which tool to call and generates the required arguments as structured output.
+3. The application executes the tool with the provided arguments and returns the result to the LLM.
+4. The LLM interprets the tool's output and continues reasoning or provides a final answer to the user.
+
+Tool Definition Format:
+Tools are typically described using JSON Schema with:
+- Name: A unique identifier for the tool (e.g., "search_web", "get_weather").
+- Description: A natural language explanation of what the tool does. This is critical — the LLM uses this description to decide when to use the tool.
+- Parameters: A JSON Schema object defining the input arguments, their types, and which are required.
+
+Example tool definition:
+{
+  "name": "get_weather",
+  "description": "Get the current weather for a given city",
+  "parameters": {
+    "type": "object",
+    "properties": {
+      "city": {"type": "string", "description": "City name"},
+      "units": {"type": "string", "enum": ["celsius", "fahrenheit"]}
+    },
+    "required": ["city"]
+  }
+}
+
+Common Tool Categories:
+- Information Retrieval: Web search, database queries, document lookup, knowledge base search.
+- Code Execution: Running Python/JavaScript code in a sandbox, executing shell commands.
+- Communication: Sending emails, posting to Slack, creating calendar events.
+- File Operations: Reading, writing, and editing files on disk.
+- API Integration: Calling third-party APIs (weather, maps, payment, etc.).
+- Data Processing: Performing calculations, transforming data, generating charts.
+
+Parallel vs Sequential Tool Calls:
+- Sequential: The LLM calls one tool at a time, using each result to decide the next step.
+- Parallel: The LLM issues multiple tool calls simultaneously when they are independent, reducing latency.
+
+Tool Call Best Practices:
+- Write clear, specific tool descriptions so the LLM knows when to use each tool.
+- Validate tool arguments before execution to catch errors early.
+- Implement timeouts and error handling to prevent agents from hanging.
+- Limit the number of available tools to reduce decision complexity for the LLM.
+- Log all tool calls for debugging and auditing.
+
+OpenAI Function Calling:
+OpenAI popularized the tool calling paradigm with their "function calling" API. When you pass a list of functions in the API request, the model can choose to output a JSON object containing the function name and arguments instead of generating text. The application then executes the function and feeds the result back.
+
+Anthropic Tool Use:
+Anthropic's Claude models also support tool use. The model outputs a structured tool_use block with the tool name and input parameters. The application executes the tool and returns the result in a tool_result block.

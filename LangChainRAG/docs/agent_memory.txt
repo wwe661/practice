@@ -1,0 +1,71 @@
+Agent Memory
+=============
+
+Memory is a critical component that allows AI agents to retain, recall, and use information across interactions. Without memory, an agent would treat every conversation as a fresh start, losing all context from previous interactions.
+
+Types of Agent Memory
+---------------------
+
+Short-Term Memory (Working Memory):
+- Holds information relevant to the current conversation or task.
+- Implemented as the conversation history passed to the LLM in each API call.
+- Limited by the model's context window (e.g., 128K tokens for GPT-4o).
+- Automatically maintained — each message is appended to the conversation history.
+- Cleared when the conversation ends or the context window is exceeded.
+
+Long-Term Memory (Persistent Memory):
+- Stores information that persists across multiple conversations and sessions.
+- Must be explicitly implemented as the LLM itself has no built-in persistence.
+- Common implementations: vector databases, key-value stores, relational databases.
+- Used for: user preferences, past decisions, learned facts, task history.
+
+Episodic Memory:
+- Stores specific past experiences or interactions as discrete episodes.
+- Allows the agent to recall "what happened before" in similar situations.
+- Example: Remembering that a user prefers Python over JavaScript for code generation.
+- Implementation: Store conversation summaries or key events with timestamps and retrieve relevant episodes based on similarity.
+
+Semantic Memory:
+- Stores general knowledge and facts about the world or a domain.
+- Implemented via knowledge bases, RAG systems, or structured databases.
+- Example: Knowing that "ChromaDB is an open-source vector database" regardless of any specific conversation.
+
+Procedural Memory:
+- Stores learned procedures, workflows, and skills.
+- Allows the agent to "remember how" to perform tasks.
+- Example: Remembering the steps to deploy an application after doing it once.
+- Implementation: Store successful action sequences as templates or playbooks.
+
+Memory Architecture Patterns
+-----------------------------
+
+Scratchpad Pattern:
+- The agent maintains a working scratchpad within the conversation for intermediate calculations and reasoning.
+- Cleared at the end of the task or conversation.
+
+Summary Buffer:
+- As the conversation grows, older messages are summarized to fit within the context window.
+- Preserves the gist of past interactions while saving token space.
+- Implemented by periodically calling the LLM to generate a summary of the conversation so far.
+
+RAG-Based Memory:
+- Store all past interactions as embeddings in a vector database.
+- Before each response, retrieve the most relevant past interactions or facts.
+- Scales well to thousands of past conversations.
+
+Entity Memory:
+- Tracks information about specific entities (people, projects, concepts) mentioned in conversations.
+- Maintains an entity store that is updated as new information emerges.
+- Example: Tracking that "Project Alpha" uses React, is led by Alice, and is due in March.
+
+Memory Management Challenges:
+- Storage Growth: Long-term memory grows over time and requires pruning or archival strategies.
+- Relevance Decay: Older memories may become outdated or irrelevant.
+- Conflicting Information: Newer facts may contradict older stored information.
+- Privacy: Stored memories may contain sensitive information that needs to be handled carefully.
+- Retrieval Quality: The agent must retrieve the right memories at the right time without overloading the context.
+
+Memory in Popular Frameworks:
+- LangChain: Provides ConversationBufferMemory, ConversationSummaryMemory, VectorStoreRetrieverMemory, and EntityMemory classes.
+- MemGPT: Implements a virtual memory hierarchy inspired by operating systems, with a main context (RAM) and archival storage (disk).
+- OpenAI Assistants: Built-in thread management that automatically handles conversation history.

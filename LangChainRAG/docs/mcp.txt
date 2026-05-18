@@ -1,0 +1,55 @@
+Model Context Protocol (MCP)
+============================
+
+The Model Context Protocol (MCP) is an open standard developed by Anthropic that provides a universal, standardized way for AI applications to connect with external data sources, tools, and services. Think of MCP as a "USB-C port for AI" — a single protocol that lets any AI model plug into any compatible data source or tool.
+
+Why MCP Exists:
+Before MCP, every AI application had to build custom integrations for each data source, tool, or service it wanted to use. This led to:
+- N×M integration complexity (N models × M tools = many custom connectors).
+- Fragmented ecosystems where tools built for one AI platform didn't work with another.
+- Duplicated effort across teams building similar integrations.
+
+MCP solves this by defining a standard protocol. A tool provider implements the MCP server once, and any MCP-compatible AI client can use it.
+
+MCP Architecture:
+The protocol follows a client-server model:
+- MCP Host: The AI application (e.g., Claude Desktop, an IDE, a chatbot) that wants to use external tools and data.
+- MCP Client: A protocol client embedded in the host that maintains a connection to MCP servers.
+- MCP Server: A lightweight program that exposes specific capabilities (tools, resources, prompts) through the standardized protocol.
+
+MCP Capabilities:
+MCP servers can expose three types of capabilities:
+1. Tools — Functions the AI can call (e.g., search a database, create a file, send a message). Tools are model-controlled: the AI decides when and how to use them.
+2. Resources — Data the AI can read (e.g., file contents, database records, API responses). Resources are application-controlled: the host application decides when to fetch them.
+3. Prompts — Reusable prompt templates that help the AI interact with specific domains. Prompts are user-controlled: the user selects which prompt template to use.
+
+MCP Transport Mechanisms:
+- stdio (Standard I/O): The MCP server runs as a local subprocess. Communication happens through stdin/stdout. Best for local tools and integrations.
+- SSE (Server-Sent Events) over HTTP: The MCP server runs as a remote HTTP service. Supports remote access and multi-user scenarios. Good for production deployments.
+
+Example MCP Workflow:
+1. The host application starts an MCP server (e.g., a file system server).
+2. The MCP client discovers the server's available tools, resources, and prompts.
+3. The user asks the AI a question that requires external data.
+4. The AI decides to call a tool exposed by the MCP server.
+5. The MCP client sends the tool call request to the server.
+6. The server executes the tool and returns the result.
+7. The AI uses the result to formulate its response.
+
+Popular MCP Servers:
+- Filesystem: Read/write local files and directories.
+- GitHub: Interact with repositories, issues, and pull requests.
+- PostgreSQL / SQLite: Query and manage databases.
+- Slack: Send messages and search workspace history.
+- Google Drive: Access and search documents.
+- Brave Search: Perform web searches.
+
+Benefits of MCP:
+- Standardization: Build once, use everywhere.
+- Composability: Combine multiple MCP servers to give an AI agent a rich set of capabilities.
+- Security: Each server runs in isolation with explicit permission boundaries.
+- Ecosystem Growth: A growing library of community-built MCP servers covers many popular tools and services.
+
+MCP vs Direct API Integration:
+- Direct API: Tight coupling, custom code for each service, hard to maintain.
+- MCP: Loose coupling, standard protocol, plug-and-play with any MCP-compatible client.

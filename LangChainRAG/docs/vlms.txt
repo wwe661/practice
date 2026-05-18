@@ -1,0 +1,90 @@
+Vision Language Models (VLMs)
+==============================
+
+Vision Language Models (VLMs) are multimodal AI models that can process and understand both text and images simultaneously. They extend the capabilities of traditional text-only LLMs by adding visual perception, enabling tasks that require understanding images, diagrams, screenshots, documents, and videos.
+
+How VLMs Work
+-------------
+
+VLMs combine a vision encoder (which processes images) with a language model (which processes text):
+1. Vision Encoder: Converts an image into a sequence of visual tokens (embedding vectors). Common vision encoders include ViT (Vision Transformer) and SigLIP.
+2. Projection Layer: Maps the visual tokens into the same embedding space as the language model's text tokens.
+3. Language Model: Processes the combined sequence of visual and text tokens to generate a text response.
+
+The training process typically involves:
+- Pre-training on large-scale image-text datasets (e.g., image captions, alt-text).
+- Instruction tuning on curated datasets of visual question-answering, document understanding, and conversation.
+
+Popular VLMs:
+- GPT-4o (OpenAI): Natively multimodal — processes text, images, and audio within a single model.
+- Claude 3.5 Sonnet (Anthropic): Strong vision capabilities including document analysis, chart reading, and screenshot understanding.
+- Gemini 1.5 Pro (Google): Supports up to 2M token context including images and videos.
+- LLaVA (Open Source): A family of open-source VLMs that pair CLIP vision encoders with LLaMA language models.
+- Qwen-VL (Alibaba): Open-source VLM with strong multilingual and document understanding.
+
+VLM Capabilities
+-----------------
+
+Image Understanding:
+- Describing what's in an image (captioning).
+- Answering questions about image content (Visual QA).
+- Identifying objects, people, text, and relationships in images.
+
+Document and OCR Understanding:
+- Reading and extracting text from photos of documents, receipts, or handwritten notes.
+- Understanding table structures, charts, and graphs.
+- Parsing forms and invoices.
+
+Screenshot and UI Understanding:
+- Identifying UI elements (buttons, menus, text fields) in application screenshots.
+- Describing the layout and functionality of a user interface.
+- Enabling computer-use agents that interact with GUIs.
+
+Chart and Diagram Analysis:
+- Reading bar charts, line graphs, pie charts, and interpreting trends.
+- Understanding flowcharts, architectural diagrams, and mind maps.
+
+Code and Technical Diagrams:
+- Reading whiteboard photos of system designs.
+- Understanding UML diagrams, database schemas, and network topologies.
+
+Video Understanding:
+- Some VLMs (e.g., Gemini) can process video frames to understand temporal sequences.
+- Applications: video summarization, action recognition, surveillance analysis.
+
+Using VLMs via API
+-------------------
+
+Most VLM APIs accept images as:
+- Base64-encoded strings embedded in the API request.
+- URLs pointing to publicly accessible images.
+- File uploads (in some implementations).
+
+Example API call (OpenAI format):
+{
+  "model": "gpt-4o",
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {"type": "text", "text": "What's in this image?"},
+        {"type": "image_url", "image_url": {"url": "data:image/png;base64,..."}}
+      ]
+    }
+  ]
+}
+
+VLM Limitations:
+- Spatial Reasoning: VLMs can struggle with precise spatial relationships (e.g., "is the red box to the left of or behind the blue box?").
+- Counting: Accurately counting objects in images remains challenging.
+- Fine-Grained Text: Small or stylized text in images may be misread.
+- Hallucination: VLMs can "see" things that aren't in the image or misidentify objects.
+- Cost: Processing images uses more tokens than text alone, increasing API costs.
+- Latency: Image processing adds latency compared to text-only requests.
+
+VLM Applications in AI Systems:
+- Document Processing Pipelines: Extract structured data from scanned documents.
+- Computer Use Agents: Agents that interact with GUIs by "seeing" the screen.
+- Accessibility: Describing images for visually impaired users.
+- Quality Assurance: Automated UI testing by comparing screenshots against expected designs.
+- Content Moderation: Detecting inappropriate or harmful content in images.
